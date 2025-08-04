@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallote-Gold Coins</title>
+  <style>
+    :root {
+      --gold-color: #FFD700;
+      --purple-color: #B97FFF;
+      --black-color: #1a1a1a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      background-color: var(--black-color);
+    }
+
+    .background-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -2;
+    }
+
+    .background-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: -1;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-top: 40px;
+      color: white;
+      text-shadow: 2px 2px 6px black;
+      text-align: center;
+    }
+
+    .coin-container {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin: 40px auto;
+      animation: spin 10s linear infinite;
+    }
+
+    .triangle {
+      width: 0;
+      height: 0;
+      border-left: 110px solid transparent;
+      border-right: 110px solid transparent;
+      border-top: 190px solid var(--purple-color);
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      transform: rotate(180deg);
+      border-radius: 8px;
+    }
+
+    .coin {
+      background-color: var(--black-color);
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+    }
+
+    .coin-text {
+      color: var(--gold-color);
+      font-weight: bold;
+      font-size: 16px;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .balance-box {
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      margin: 20px auto;
+      max-width: 400px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .balance-box h2 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .balance-box p {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--gold-color);
+    }
+
+    .buttons {
+      margin-top: 25px;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: var(--black-color);
+      color: white;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    button:hover {
+      background-color: #333;
+    }
+
+    input[type="text"], input[type="password"] {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+      width: 250px;
+      font-size: 1rem;
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size: 0.8rem;
+      color: #ddd;
+      max-width: 700px;
+      line-height: 1.5;
+      text-align: center;
+      text-shadow: 0 0 3px rgba(0,0,0,0.8);
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    #login-container, #painel {
+      display: none;
+      padding-top: 50px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background-container">
+    <video autoplay muted loop playsinline>
+      <source src="https://cdn.coverr.co/videos/coverr-colorful-universe-2399/1080p.mp4" type="video/mp4">
+      Seu navegador não suporta vídeo em background.
+    </video>
+  </div>
+  <div class="overlay"></div>
+
+  <!-- LOGIN / CADASTRO -->
+  <div id="login-container">
+    <h1>Login ou Cadastro</h1>
+    <input type="text" id="username" placeholder="Usuário" />
+    <br>
+    <input type="password" id="password" placeholder="Senha" />
+    <div class="buttons">
+      <button onclick="registrar()">Cadastrar</button>
+      <button onclick="entrar()">Entrar</button>
+    </div>
+  </div>
+
+  <!-- PAINEL USUÁRIO -->
+  <div id="painel">
+    <h1>Painel de Coin Gallote-Gold</h1>
+
+    <div class="coin-container">
+      <div class="triangle"></div>
+      <div class="coin">
+        <div class="coin-text">Gallote<br>Gold</div>
+      </div>
+    </div>
+
+    <div class="balance-box">
+      <h2>Seu saldo atual:</h2>
+      <p id="balance">0,00 GG</p>
+    </div>
+
+    <div class="buttons">
+      <button onclick="depositar()">Depositar</button>
+      <button onclick="sacar()">Sacar</button>
+      <button onclick="logout()">Sair</button>
+    </div>
+
+    <footer>
+      Esta moeda virtual foi criada para ser utilizada apenas em nosso painel de intermediação de Serviços. Temos parcerias que também utilizam a nossa moeda virtual em seus sistemas web. Cada moeda Gallote-Gold representa R$50,00 de poder de compra. Você também recebe 50% de desconto em compras com a moeda. Por exemplo: uma consulta de R$100,00 pode ser adquirida com apenas 1 coin Gallote-Gold. © 2015 Gallote Intelligence. Todos os direitos reservados.
+    </footer>
+  </div>
+
+  <script>
+    let usuarioAtual = null;
+    let saldo = 0;
+
+    const balanceEl = document.getElementById('balance');
+    const loginContainer = document.getElementById('login-container');
+    const painel = document.getElementById('painel');
+
+    function atualizarSaldo() {
+      balanceEl.textContent = saldo.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }) + ' GG';
+    }
+
+    function registrar() {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+
+      if (!user || !pass) return alert("Preencha os campos.");
+
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || {};
+      if (usuarios[user]) {
+        return alert("Usuário já existe.");
+      }
+
+      usuarios[user] = { senha: pass, saldo: 0 };
+      localStorage.setItem('usuarios', JSON.stringify(usuarios));
+      alert("Cadastro realizado com sucesso!");
+    }
+
+    function entrar() {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || {};
+      if (!usuarios[user] || usuarios[user].senha !== pass) {
+        return alert("Usuário ou senha inválidos.");
+      }
+
+      usuarioAtual = user;
+      saldo = usuarios[user].saldo;
+
+      loginContainer.style.display = 'none';
+      painel.style.display = 'block';
+      atualizarSaldo();
+    }
+
+    function logout() {
+      usuarioAtual = null;
+      saldo = 0;
+      painel.style.display = 'none';
+      loginContainer.style.display = 'block';
+    }
+
+    function salvarSaldo() {
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || {};
+      if (usuarios[usuarioAtual]) {
+        usuarios[usuarioAtual].saldo = saldo;
+        localStorage.setItem('usuarios', JSON.stringify(usuarios));
+      }
+    }
+
+    function depositar() {
+      const valor = prompt("Digite o valor a depositar:");
+      const num = parseFloat(valor);
+      if (!isNaN(num) && num > 0) {
+        saldo += num;
+        salvarSaldo();
+        atualizarSaldo();
+      } else {
+        alert("Valor inválido.");
+      }
+    }
+
+    function sacar() {
+      const valor = prompt("Digite o valor a sacar:");
+      const num = parseFloat(valor);
+      if (!isNaN(num) && num > 0 && num <= saldo) {
+        saldo -= num;
+        salvarSaldo();
+        atualizarSaldo();
+      } else {
+        alert("Valor inválido ou saldo insuficiente.");
+      }
+    }
+
+    // Mostrar login ao carregar
+    loginContainer.style.display = 'block';
+  </script>
+</body>
+</html>
